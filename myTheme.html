@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="angular-1.4.6/angular.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="myTheme.css" type="text/css">
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+</head>
+
+
+<body>
+    <div class=" row main" ng-app="myapp">
+        <div class="col-md-3 col-sm-4 left-part ">
+            <!-- 功能选项 -->
+            <div id="acc-port" class="panel-group" ng-controller="myController">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a ng-click="clickGo()">功能</a>
+                        </h4>
+                    </div>
+                    <div class="panel-collapse" ng-show="showOne">
+                        <div class="panel-body">
+                            <div class="port-row">
+                                <input type="file" @change="importFileChanged" id="input-file" style="display: none" />
+                                <div class="btn-group" role="group" style="margin-right: 5px">
+                                    <button type="button" class="btn btn-primary" data-target="#download-js-modal" data-toggle="modal" @click="useTheme()">
+                                        <span class="glyphicon glyphicon-download-alt"></span>
+                                        下载
+                                    </button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" @click="importJson()">
+                                        <span class="glyphicon glyphicon-import"></span>
+                                        导入配置
+                                    </button>
+                                    <button type="button" class="btn btn-default" @click="exportJson()">
+                                        <span class="glyphicon glyphicon-export"></span>
+                                        导出配置
+                                    </button>
+                                </div>
+                                <a data-toggle="modal" class="icon" data-target="#download-modal">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 col-sm-8 chart-container scroll-content right-part ">
+            右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边
+        </div>
+    </div>
+
+
+    <script>
+        angular.module("myapp", [])
+            .controller("myController", ["$scope",function ($scope) {
+                $scope.showOne = true;
+                $scope.clickGo = function(){
+                    $scope.showOne = !$scope.showOne ;
+                }
+            }]);
+    </script>
+
+</body>
+
+</html>

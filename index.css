@@ -1,0 +1,34 @@
+html, body{
+    padding: 0;
+    margin:0;
+}
+.main{
+    margin: auto;
+    width:80%;
+    margin-top: 30px;
+    background-color: antiquewhite;
+}
+.table-div{
+    height:200px;
+    overflow-y: auto;
+
+}
+.table-div table{
+    border-collapse: collapse;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    width:100%;
+    border: medium double rgb(250,0,255)
+}
+
+.table-div table thead tr{
+    position: relative;  
+    TOP:0px;
+    margin: 1px solid #123112;
+    height:50px;
+}
+
+.table-div table tbody tr th{
+    height:40px;
+    border-top:1px solid black;
+}
