@@ -122,6 +122,31 @@
         function _setWordCloud(cloudData) {
             var option = {
                 series: [{
+
+                    title: {
+                    text: '热点分析',
+                    link: 'https://www.baidu.com/s?wd=' + encodeURIComponent('ECharts'),
+                    x: 'center',
+                    textStyle: {
+                        fontSize: 23
+                    }
+
+                },
+                //backgroundColor: '#F7F7F7',
+                tooltip: {
+                    show: true
+                },
+                //toolbox: {
+                //    feature: {
+                //        saveAsImage: {
+                //            iconStyle: {
+                //                normal: {
+                //                    color: '#FFFFFF'
+                //                }
+                //            }
+                //        }
+                //    }
+                //},
                     name: '热点分析',
                     type: 'wordCloud',
                     //size: ['9%', '99%'],
@@ -140,13 +165,14 @@
                     textStyle: {
                         normal: {
                             fontFamily: '微软雅黑',
-                            color: function () {
-                                return 'rgb(' + [
-                                    Math.round(Math.random() * 160),
-                                    Math.round(Math.random() * 160),
-                                    Math.round(Math.random() * 160)
-                                ].join(',') + ')';
-                            }
+                            // color: function () {
+                            //     return 'rgb(' + [
+                            //         Math.round(Math.random() * 160),
+                            //         Math.round(Math.random() * 160),
+                            //         Math.round(Math.random() * 160)
+                            //     ].join(',') + ')';
+                            // }
+                            color:"black"
                         },
                         emphasis: {
                             shadowBlur: 10,
