@@ -22,7 +22,7 @@
     <div class=" row main" ng-app="myapp">
         <div class="col-md-3 col-sm-4 left-part ">
             <!-- 功能选项 -->
-            <div id="acc-port" class="panel-group" ng-controller="myController">
+            <div id="acc-port" class="panel-group" ng-controller="myTreeController">
                 <div class="panel">
                     <div class="panel-heading">
                         <h4 class="panel-title">
@@ -58,20 +58,60 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-9 col-sm-8 chart-container scroll-content right-part ">
-            右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边右边
+        <div class="col-md-9 col-sm-8 chart-container scroll-content right-part" ng-controller="myChartCtrl">
+            <div class="row">
+                <div class="col-5" ng-class="{'yes':column.id==2}" ng-mouseenter="mouseenter($event)" ng-mouseleave="mouseleave($event)"
+                    ng-repeat="column in columns track by column.id">
+                    <div class="panelShow">{{column.content}}</div>
+                </div>
+            </div>
+
         </div>
     </div>
 
 
     <script>
-        angular.module("myapp", [])
-            .controller("myController", ["$scope",function ($scope) {
-                $scope.showOne = true;
-                $scope.clickGo = function(){
-                    $scope.showOne = !$scope.showOne ;
+        var app = angular.module("myapp", []);
+        app.controller("myTreeController", ["$scope", function ($scope) {
+            $scope.showOne = true;
+            $scope.clickGo = function () {
+                $scope.showOne = !$scope.showOne;
+            }
+        }])
+        app.controller("myChartCtrl", ["$scope", function ($scope) {
+            $scope.columns = [{
+                id: 1,
+                content: "第一个"
+            }, {
+                id: 2,
+                content: "第二个"
+            }, {
+                id: 3,
+                content: "第三个"
+            }, {
+                id: 4,
+                content: "第4个"
+            }, {
+                id: 5,
+                content: "第5个"
+            }];
+            $scope.mouseenter = function (e) {
+                if (!$(e.target).hasClass("yes")) {
+                    setTimeout(function(){
+                        $(e.target).addClass("yes");
+
+                    })
                 }
-            }]);
+            };
+            $scope.mouseleave = function (e) {
+                if ($(e.target).hasClass("yes")) {
+                    setTimeout(function(){
+                        $(e.target).removeClass("yes");
+
+                    })
+                }
+            }
+        }])
     </script>
 
 </body>

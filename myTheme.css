@@ -75,3 +75,11 @@ body {
 .panel-body{
     padding: 15px;
 }
+.panelShow{
+    background-color: #ddd;
+    margin: 5px;
+    margin-bottom: 20px;
+}
+.yes{
+    border:2px solid black;
+}
