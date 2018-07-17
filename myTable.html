@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+    <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
+</head>
+<link rel="stylesheet" href="myTable.css" type="text/css">
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+<script src="underscore-min.js"></script>
+
+<body>
+
+    <div ng-app="myApp" ng-controller="customersCtrl">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img width="30" height="30" class="d-inline-block align-top" alt=""> 自己用的页面
+            </a>
+        </nav>
+        <div class="container-fluid">
+            <table class="mainTable">
+                <thead>
+                    <tr>
+                        <th ng-repeat="column in columns" width=column.width>{{column.name}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in tableData">
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Name }}</td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                        <td width=row.width>
+                            <button type="button" ng-click="row.timeDetail(row)" class="btn btn-link btn-sm">查看详情</button>
+                        </td>
+                        <td width=row.width>
+                            <button type="button" ng-click="row.configDetail(row)" class="btn btn-link btn-sm">查看详情</button>
+                        </td>
+                        <td width=row.width>
+                            <button type="button" ng-click="row.forceEnd(row)" class="btn btn-link btn-sm">强制结束</button>
+                        </td>
+                        <td width=row.width>
+                            <button type="button" class="btn btn-link btn-sm">重启</button>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('customersCtrl', ['commonModal', '$scope', '$http', function (commonModal, $scope, $http) {
+
+
+            $scope.columns = [{
+                name: "id",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "任务名称",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "状态",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "排队数",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "组织机构/用户",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "开始时间",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "执行总时长",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "任务来源",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "定时同步详情",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "执行参数",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "强制结束",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "重启",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }]
+
+            $scope.tableData = [{
+                Name: "dasdasdsadasdasdsa",
+                Country: "USAUSAUSAUSAUSAUSAUSAUSAUSA",
+                width: "20%"
+
+            }, {
+                Name: "bbb",
+                Country: "China",
+                width: "20%"
+            }];
+
+            // 初始化页面，获取后台数据
+            $scope.init = function () {
+                // $http({
+                //     method: 'GET',
+                //     url: '/someUrl'
+                // }).then(function successCallback(response) {
+                //     // 请求成功执行代码
+                // }, function errorCallback(response) {
+                //     // 请求失败执行代码
+                // });
+                $scope.doData();
+            };
+
+            // 对数据做处理点击事件，按钮禁用状态，任务执行状态
+            $scope.doData = function () {
+                _.each($scope.tableData, function (item) {
+                    item.timeDetail = function (row) {
+                        commonModal.openMoadl(row.data + "定时同步详情");
+                    };
+                    item.configDetail = function (row) {
+                        commonModal.openMoadl(row.data + "执行参数详情");
+                    };
+                    item.forceEnd = function (row) {
+                        // post请求
+                        commonModal.openMoadl(row.data + "强制结束");
+                    }
+                })
+            };
+
+            $scope.init();
+            // $http.get("/try/angularjs/data/Customers_JSON.php")
+            //     .then(function (result) {
+            //         $scope.names = result.data.records;
+            //     });
+        }]);
+
+        app.service('commonModal', function () {
+
+            this.openMoadl = function (data) {
+                alert(data);
+                // var modalInstance = $modal.open({
+                //     windowClass: '',
+                //     templateUrl: 'modal.html',
+                //     controller: 'ModalInstanceCtrl',
+                //     resolve: {}
+                // });
+                // modalInstance.opened.then(function () { // 模态窗口打开之后执行的函数
+                //     console.log('modal is opened');
+                // });
+                // modalInstance.result.then(function (ret) { //模态窗口关闭之后回传参数
+                //     $modalInstance.close($scope.selected);
+                //     console.log(ret);
+                // }, function (reason) {
+                //     console.log(reason);
+                // });
+            };
+        });
+    </script>

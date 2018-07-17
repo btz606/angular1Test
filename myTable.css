@@ -1,0 +1,25 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.mainTable {
+    width: 100%;
+    text-align: center;
+    min-width: 1000px;
+    overflow-x: auto;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+
+mainTable, td, th {
+    border: 1px solid rgb(138, 131, 131);
+}
+
+.text-long-th {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
