@@ -5,12 +5,18 @@
     <meta charset="utf-8">
     <script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
     <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="pagination/pagination.css">
+    <link rel="stylesheet" href="tm.pagination-master/css/pagination.css">
+
 </head>
 <link rel="stylesheet" href="myTable.css" type="text/css">
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"></script>
 <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
 <script src="underscore-min.js"></script>
+<script src="pagination/jquery.pagination.js"></script>
+<script src="tm.pagination-master/js/tm.pagination.min.js"></script>
+
 
 <body>
 
@@ -53,124 +59,144 @@
                 </tbody>
 
             </table>
+            <tm-pagination conf="paginationConf"></tm-pagination>
         </div>
 
 
     </div>
 
     <script>
-        var app = angular.module('myApp', []);
-        app.controller('customersCtrl', ['commonModal', '$scope', '$http', function (commonModal, $scope, $http) {
+        var app = angular.module('myApp', ['im.pagination']);
+        app.controller('customersCtrl', ['commonModal', '$scope', '$http', 'ListFactory',
+            function (commonModal, $scope, $http, ListFactory) {
+
+                $scope.urlCondition = "";
+
+                // 查询数据结果集的总数量
+                $scope.ListCount = 0;
+
+                // json数据
+                $scope.List = "";
+
+                // 配置分页的基本参数，分页控件的初始化
+                $scope.paginationConf = {
+                    currentPage: 1, // 当前页数
+                    totalItems: 0, // 一共多少条数据，和itemsPerPage决定一共会有几页
+                    itemsPerPage: 10, // 每页几条数据，和totalItems决定一共会有几页
+                    pagesLength: 15
+                };
 
 
-            $scope.columns = [{
-                name: "id",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "任务名称",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "状态",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "排队数",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "组织机构/用户",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "开始时间",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "执行总时长",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "任务来源",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "定时同步详情",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "执行参数",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "强制结束",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }, {
-                name: "重启",
-                width: "20%",
-                sort: "asc",
-                show: true
-            }]
 
-            $scope.tableData = [{
-                Name: "dasdasdsadasdasdsa",
-                Country: "USAUSAUSAUSAUSAUSAUSAUSAUSA",
-                width: "20%"
+                $scope.columns = [{
+                    name: "id",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "任务名称",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "状态",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "排队数",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "组织机构/用户",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "开始时间",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "执行总时长",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "任务来源",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "定时同步详情",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "执行参数",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "强制结束",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }, {
+                    name: "重启",
+                    width: "20%",
+                    sort: "asc",
+                    show: true
+                }]
 
-            }, {
-                Name: "bbb",
-                Country: "China",
-                width: "20%"
-            }];
+                $scope.tableData = [{
+                    Name: "dasdasdsadasdasdsa",
+                    Country: "USAUSAUSAUSAUSAUSAUSAUSAUSA",
+                    width: "20%"
 
-            // 初始化页面，获取后台数据
-            $scope.init = function () {
-                // $http({
-                //     method: 'GET',
-                //     url: '/someUrl'
-                // }).then(function successCallback(response) {
-                //     // 请求成功执行代码
-                // }, function errorCallback(response) {
-                //     // 请求失败执行代码
-                // });
-                $scope.doData();
-            };
+                }, {
+                    Name: "bbb",
+                    Country: "China",
+                    width: "20%"
+                }];
 
-            // 对数据做处理点击事件，按钮禁用状态，任务执行状态
-            $scope.doData = function () {
-                _.each($scope.tableData, function (item) {
-                    item.timeDetail = function (row) {
-                        commonModal.openMoadl(row.data + "定时同步详情");
-                    };
-                    item.configDetail = function (row) {
-                        commonModal.openMoadl(row.data + "执行参数详情");
-                    };
-                    item.forceEnd = function (row) {
-                        // post请求
-                        commonModal.openMoadl(row.data + "强制结束");
-                    }
-                })
-            };
+                // 初始化页面，获取后台数据
+                $scope.init = function () {
+                    // $http({
+                    //     method: 'GET',
+                    //     url: '/someUrl'
+                    // }).then(function successCallback(response) {
+                    //     // 请求成功执行代码
+                    // }, function errorCallback(response) {
+                    //     // 请求失败执行代码
+                    // });
+                    $scope.doData();
+                };
 
-            $scope.init();
-            // $http.get("/try/angularjs/data/Customers_JSON.php")
-            //     .then(function (result) {
-            //         $scope.names = result.data.records;
-            //     });
-        }]);
+                // 对数据做处理点击事件，按钮禁用状态，任务执行状态
+                $scope.doData = function () {
+                    _.each($scope.tableData, function (item) {
+                        item.timeDetail = function (row) {
+                            commonModal.openMoadl(row.data + "定时同步详情");
+                        };
+                        item.configDetail = function (row) {
+                            commonModal.openMoadl(row.data + "执行参数详情");
+                        };
+                        item.forceEnd = function (row) {
+                            // post请求
+                            commonModal.openMoadl(row.data + "强制结束");
+                        }
+                    })
+                };
+
+                $scope.init();
+                // $http.get("/try/angularjs/data/Customers_JSON.php")
+                //     .then(function (result) {
+                //         $scope.names = result.data.records;
+                //     });
+            }
+        ]);
 
         app.service('commonModal', function () {
 
@@ -191,6 +217,17 @@
                 // }, function (reason) {
                 //     console.log(reason);
                 // });
+            };
+        });
+
+        app.factory('ListFactory', function ($http, $rootScope) {
+            return {
+                getList: function (condition) {
+                    return $http.get(baseAddress + "trust/GetResult?" + condition);
+                },
+                getListCount: function (condition) {
+                    return $http.get(baseAddress + "trust/GetResultCount?" + condition);
+                }
             };
         });
     </script>
