@@ -66,24 +66,20 @@
     </div>
 
     <script>
-        var app = angular.module('myApp', ['im.pagination']);
+        var app = angular.module('myApp', ['tm.pagination']);
         app.controller('customersCtrl', ['commonModal', '$scope', '$http', 'ListFactory',
             function (commonModal, $scope, $http, ListFactory) {
 
-                $scope.urlCondition = "";
-
-                // 查询数据结果集的总数量
-                $scope.ListCount = 0;
-
-                // json数据
-                $scope.List = "";
-
-                // 配置分页的基本参数，分页控件的初始化
                 $scope.paginationConf = {
-                    currentPage: 1, // 当前页数
-                    totalItems: 0, // 一共多少条数据，和itemsPerPage决定一共会有几页
-                    itemsPerPage: 10, // 每页几条数据，和totalItems决定一共会有几页
-                    pagesLength: 15
+                    currentPage: 1,
+                    totalItems: 8000,
+                    itemsPerPage: 15,
+                    pagesLength: 15,
+                    perPageOptions: [10, 20, 30, 40, 50],
+                    rememberPerPage: 'perPageItems',
+                    onChange: function () {
+
+                    }
                 };
 
 
