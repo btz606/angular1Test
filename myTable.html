@@ -3,225 +3,389 @@
 
 <head>
     <meta charset="utf-8">
-    <script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
-    <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="tm.pagination-master/css/pagination.css">
-
 </head>
+<script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+<link rel="stylesheet" href="bootstrap-3.3.7-dist/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="tm.pagination-master/css/pagination.css">
 <link rel="stylesheet" href="myTable.css" type="text/css">
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+<script src="bootstrap-3.3.7-dist/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="underscore-min.js"></script>
 <script src="tm.pagination-master/js/tm.pagination.min.js"></script>
+<script src="ngInfiniteScroll-1.0.0/build/ng-infinite-scroll.min.js"></script>
 
 
-<body>
-
-    <div ng-app="myApp" ng-controller="customersCtrl">
-        <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="#">
-                <img width="30" height="30" class="d-inline-block align-top" alt=""> 自己用的页面
-            </a>
-        </nav>
-        <div class="container-fluid">
+<body ng-app="myApp" ng-controller="customersCtrl">
+    <div class="navbar-title">
+        <a href="#">定时调度队列表格</a>
+    </div>
+    <div class="main">
+        <div class="search-div">
+            过滤数据(状态)：
+            <select class="select-style ml-1 select-status-width" ng-model="seleByStatusOption.selectId" ng-options="x.id as x.name for x in seleByStatusOption.options"
+                ng-change="seleByStatusOption.change(seleByStatusOption.selectId)"></select>
+        </div>
+        <div class="table-div">
             <table class="mainTable">
                 <thead>
                     <tr>
-                        <th ng-repeat="column in columns" width=column.width>{{column.name}}</th>
+                        <th class="text-long-th" title={{column.name}} ng-repeat="column in columns" width="{{column.width}}">{{column.name}}</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr ng-repeat="row in tableData">
+                <tbody ng-if="tableData.length>0">
+                    <tr ng-repeat="row in tableData track by $index">
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{$index+1}}</td>
                         <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Name }}</td>
                         <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
                         <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
-                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
-                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>
+                            <span class="pad-right-word" ng-class="{'glyphicon glyphicon-ok-sign text-success':row.status=='done',
+                            'glyphicon glyphicon-remove-sign text-danger':row.status=='fail',
+                            'glyphicon glyphicon-info-sign text-warning':row.status=='todo',
+                            'glyphicon glyphicon-refresh text-primary':row.status=='progress'}" aria-hidden="true">
+                            </span>{{ row.status }}
+                        </td>
+                        <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}+{{ row.Country }}</td>
                         <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
                         <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
                         <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
                         <td width=row.width>
-                            <button type="button" ng-click="row.timeDetail(row)" class="btn btn-link btn-sm">查看详情</button>
+                            <button type="button" ng-disabled="$index%2==0" ng-click="row.timeDetail(row)" class="btn btn-link btn-sm no-padding-btn">查看详情</button>
                         </td>
                         <td width=row.width>
-                            <button type="button" ng-click="row.configDetail(row)" class="btn btn-link btn-sm">查看详情</button>
+                            <button type="button" ng-disabled="$index%2!=0" ng-click="row.forceEnd(row)" class="btn btn-link btn-sm no-padding-btn">强制结束</button>
                         </td>
                         <td width=row.width>
-                            <button type="button" ng-click="row.forceEnd(row)" class="btn btn-link btn-sm">强制结束</button>
-                        </td>
-                        <td width=row.width>
-                            <button type="button" class="btn btn-link btn-sm">重启</button>
+                            <button type="button" class="btn btn-link btn-sm no-padding-btn">重启</button>
                         </td>
                     </tr>
                 </tbody>
-
+                <tbody ng-if="!(tableData.length > 0)">
+                    <tr>
+                        <td class="no-data-show" colspan="12">暂无数据</td>
+                    </tr>
+                </tbody>
             </table>
-            <tm-pagination conf="paginationConf"></tm-pagination>
+            <!-- <div infinite-scroll="doMore.nextPage()" infinite-scroll-disabled="doMore.busy" infinite-scroll-distance="0">
+                <dl ng-repeat="x in doMore.items">
+                    <dt>{{x.title}}
+                        <span>{{x.time | limitTo:10}}</span>
+                    </dt>
+                    <dd>{{x.content}}</dd>
+                </dl>
+            </div>
+            <div ng-if="doMore.busy">加载中...</div> -->
         </div>
-
-
+        <!-- <div class="foot-div">
+            <tm-pagination conf="paginationConf"></tm-pagination>
+            <div class="pagination ml-1 my-page-style">
+                <span>共{{paginationConf.totalItems}}条记录</span>
+                <select class="select-style ml-1" ng-model="selecrOption.selectId" ng-options="x.id as x.name for x in selecrOption.options"
+                    ng-change="selecrOption.change(selecrOption.selectId)"></select>
+            </div>
+        </div> -->
     </div>
+    <loading></loading>
+</body>
+<script>
+    var app = angular.module('myApp', ['tm.pagination']);
+    app.controller('customersCtrl', ['commonModal', '$scope', '$http',
+        function (commonModal, $scope, $http) {
 
-    <script>
-        var app = angular.module('myApp', ['tm.pagination']);
-        app.controller('customersCtrl', ['commonModal', '$scope', '$http', 'ListFactory',
-            function (commonModal, $scope, $http, ListFactory) {
+            $scope.loading = false;
 
-                $scope.paginationConf = {
-                    currentPage: 1,
-                    totalItems: 8000,
-                    itemsPerPage: 15,
-                    pagesLength: 15,
-                    perPageOptions: [10, 20, 30, 40, 50],
-                    rememberPerPage: 'perPageItems',
-                    onChange: function () {
-
-                    }
-                };
-
-
-
-                $scope.columns = [{
-                    name: "id",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "任务名称",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "状态",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "排队数",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "组织机构/用户",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "开始时间",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "执行总时长",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "任务来源",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "定时同步详情",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "执行参数",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "强制结束",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }, {
-                    name: "重启",
-                    width: "20%",
-                    sort: "asc",
-                    show: true
-                }]
-
-                $scope.tableData = [{
-                    Name: "dasdasdsadasdasdsa",
-                    Country: "USAUSAUSAUSAUSAUSAUSAUSAUSA",
-                    width: "20%"
-
-                }, {
-                    Name: "bbb",
-                    Country: "China",
-                    width: "20%"
-                }];
-
-                // 初始化页面，获取后台数据
-                $scope.init = function () {
-                    // $http({
-                    //     method: 'GET',
-                    //     url: '/someUrl'
-                    // }).then(function successCallback(response) {
-                    //     // 请求成功执行代码
-                    // }, function errorCallback(response) {
-                    //     // 请求失败执行代码
-                    // });
-                    $scope.doData();
-                };
-
-                // 对数据做处理点击事件，按钮禁用状态，任务执行状态
-                $scope.doData = function () {
-                    _.each($scope.tableData, function (item) {
-                        item.timeDetail = function (row) {
-                            commonModal.openMoadl(row.data + "定时同步详情");
-                        };
-                        item.configDetail = function (row) {
-                            commonModal.openMoadl(row.data + "执行参数详情");
-                        };
-                        item.forceEnd = function (row) {
-                            // post请求
-                            commonModal.openMoadl(row.data + "强制结束");
-                        }
-                    })
-                };
-
-                $scope.init();
-                // $http.get("/try/angularjs/data/Customers_JSON.php")
-                //     .then(function (result) {
-                //         $scope.names = result.data.records;
-                //     });
-            }
-        ]);
-
-        app.service('commonModal', function () {
-
-            this.openMoadl = function (data) {
-                alert(data);
-                // var modalInstance = $modal.open({
-                //     windowClass: '',
-                //     templateUrl: 'modal.html',
-                //     controller: 'ModalInstanceCtrl',
-                //     resolve: {}
-                // });
-                // modalInstance.opened.then(function () { // 模态窗口打开之后执行的函数
-                //     console.log('modal is opened');
-                // });
-                // modalInstance.result.then(function (ret) { //模态窗口关闭之后回传参数
-                //     $modalInstance.close($scope.selected);
-                //     console.log(ret);
-                // }, function (reason) {
-                //     console.log(reason);
-                // });
-            };
-        });
-
-        app.factory('ListFactory', function ($http, $rootScope) {
-            return {
-                getList: function (condition) {
-                    return $http.get(baseAddress + "trust/GetResult?" + condition);
-                },
-                getListCount: function (condition) {
-                    return $http.get(baseAddress + "trust/GetResultCount?" + condition);
+            var pageConfigDefault = {
+                currentPage: 1,
+                totalItems: 0,
+                itemsPerPage: 20,
+                pagesLength: 20,
+                perPageOptions: [10, 20, 30, 40, 50],
+                rememberPerPage: 'perPageItems',
+                onChange: function (item) {
+                    console.log(item);
                 }
             };
-        });
-    </script>
+
+            // 过滤条件选择
+            $scope.seleByStatusOption = {
+                selectId: "",
+                options: [{
+                        name: "全部状态",
+                        id: ""
+                    }, {
+                        name: "已完成",
+                        id: "done"
+                    },
+                    {
+                        name: "同步中",
+                        id: "progress"
+                    },
+                    {
+                        name: "未同步",
+                        id: "todo"
+                    },
+                    {
+                        name: "同步失败",
+                        id: "fail"
+                    }
+                ],
+                change: function (data) {
+                    // alert("发往后台" + data);
+                    $scope.loading = !$scope.loading;
+                }
+            };
+
+            // 分页页码设置
+            $scope.selecrOption = {
+                selectData: 20,
+                selectId: "20",
+                options: [{
+                        //必须写ID  
+                        name: "每页20条",
+                        id: "20"
+                    },
+                    {
+                        name: "每页50条",
+                        id: "50"
+                    },
+                    {
+                        name: "每页100条",
+                        id: "100"
+                    }
+                ],
+                change: function (data) {
+                    // 切换每页条数时将分页恢复默认状态
+                    // $scope.paginationConf ={};
+                    // $scope.paginationConf = angular.copy(pageConfigDefault);
+
+                    // $scope.paginationConf.totalItems = 0;
+                    // $scope.paginationConf.pagesLength = 20;
+                    // $scope.paginationConf.currentPage = 1;
+                    // $scope.apply();
+                    // 清空数据
+                    $scope.tableData = [];
+                    $scope.init();
+                    // alert(data);
+                }
+            };
+
+            var houtai = [{
+                Name: "dasdasdsadasdasdsa",
+                Country: "USAUSAUSAUSAUSAUSAUSAUSAUSA",
+                width: "20%",
+                status: "progress"
+            }, {
+                Name: "bbb",
+                Country: "China",
+                width: "20%",
+                status: "todo"
+            }, {
+                Name: "ccc",
+                Country: "Cananda",
+                width: "20%",
+                status: "done"
+            }, {
+                Name: "ddd",
+                Country: "Jap",
+                width: "20%",
+                status: "fail"
+            }];
+
+            /*分页配置信息,使用插件tm.pagination.js
+             *currentPage当前页;totalItems总数；itemsPerPage每页数量;perPageOptions每页选项;pagesLength下拉框中的条数
+             *onChange点击之后的触发事件
+             */
+            $scope.paginationConf = angular.copy(pageConfigDefault);
+
+
+            /*表头信息
+             *分别为id,任务名，状态，排队数，组织机构，开始时间，执行总时长，人物来源，定时同步详情，执行参数，强制结束，重启
+             *sort排序的升降序，orderBy排序依据，show是否隐藏，width宽度
+             */
+            $scope.columns = [{
+                name: "序号",
+                width: "5%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "id",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "任务来源",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "任务名称",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "状态",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "组织机构/用户",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "任务触发时间",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "任务开始时间",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "执行总时长",
+                width: "20%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "执行参数",
+                width: "13%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "强制结束",
+                width: "10%",
+                sort: "asc",
+                show: true
+            }, {
+                name: "重启",
+                width: "10%",
+                sort: "asc",
+                show: true
+            }]
+
+            /* 页面绑定的表格数据 */
+            $scope.tableData = [];
+
+            // 初始化页面，获取后台数据
+            $scope.init = function () {
+                // $http({
+                //     method: 'GET',
+                //     url: '/someUrl'
+                // }).then(function successCallback(response) {
+                //     // 请求成功执行代码
+                // }, function errorCallback(response) {
+                //     // 请求失败执行代码
+                // });
+                $scope.doData(houtai);
+            };
+
+            // 对数据做处理点击事件，按钮禁用状态，任务执行状态
+            $scope.doData = function (houtai) {
+                var index;
+                for (var i = 0; i < 50; i++) {
+                    index = _.random(0, 3);
+                    $scope.tableData.push(houtai[index]);
+                }
+                $scope.paginationConf.totalItems = $scope.tableData.length;
+                console.log($scope.tableData.length);
+                $scope.paginationConf.totalItems = _.random(100, 10000);
+                $scope.paginationConf.currentPage = 1;
+                _.each($scope.tableData, function (item) {
+                    item.timeDetail = function (row) {
+                        commonModal.openMoadl(row.data + "定时同步详情");
+                    };
+                    item.forceEnd = function (row) {
+                        // post请求
+                        commonModal.openMoadl(row.data + "强制结束");
+                    }
+                })
+            };
+
+            $scope.init();
+            // $http.get("/try/angularjs/data/Customers_JSON.php")
+            //     .then(function (result) {
+            //         $scope.names = result.data.records;
+            //     });
+        }
+    ]);
+
+    /*公用弹出框
+     *
+     *Todo...
+     */
+    app.service('commonModal', function () {
+
+        this.openMoadl = function (data) {
+            alert(data);
+            // var modalInstance = $modal.open({
+            //     windowClass: '',
+            //     templateUrl: 'modal.html',
+            //     controller: 'ModalInstanceCtrl',
+            //     resolve: {}
+            // });
+            // modalInstance.opened.then(function () { // 模态窗口打开之后执行的函数
+            //     console.log('modal is opened');
+            // });
+            // modalInstance.result.then(function (ret) { //模态窗口关闭之后回传参数
+            //     $modalInstance.close($scope.selected);
+            //     console.log(ret);
+            // }, function (reason) {
+            //     console.log(reason);
+            // });
+        };
+    });
+
+    app.directive('loading', function loading() {
+        return {
+            restrict: 'E',
+            transclude: true,
+            template: '<div ng-show="loading" class="loading" id="allDiv"  style="position:fixed; top:0px; left:0px; width:100%; height:100%; display:none; background-color:#000; opacity: 0.5; z-index:99999;">' +
+                '<img alt="" src="img/loading.gif" style="vertical-align: middle;width:100px; height:100px; position: absolute; top:50%; left:50%; margin-top: -50px; margin-left:-50px;"/>'+
+                '<span style="vertical-align: middle;width:100px; height:100px; position: absolute; top:50%;font-size:30px;color：black; left:50%; margin-top: -50px; margin-left:-50px;">数据加载中</span></div>',
+            link: function (scope, element, attr) {
+                scope.$watch('loading', function (val) {
+                    if (val) {
+                        document.getElementById("allDiv").style.display = "block";
+                    } else {
+                        document.getElementById("allDiv").style.display = 'none';
+                    }
+                });
+            }
+        }
+    });
+
+    // app.factory('scrollLoadData', ['$http', 'common', '$rootScope',
+    //     function ($http, common, $rootScope) {
+    //         var myData = function (url) {
+    //             this.items = [];
+    //             this.busy = false;
+    //             this.after = 1;
+    //             this.url = url;
+    //         };
+    //         myData.prototype.nextPage = function () {
+    //             if (this.busy) {
+    //                 return;
+    //             }
+    //             this.busy = true;
+    //             var myurl = $rootScope.serverUrl + this.url + "?pageNum=" + this.after;
+    //             $http.get(myurl).success(function (res) {
+    //                 if (res.data.list.length > 0) {
+    //                     var items = res.data.list;
+    //                     for (var i = 0; i < items.length; i++) {
+    //                         this.items.push(items[i]);
+    //                     }
+    //                     this.busy = false;
+    //                     this.after += 1;
+    //                     if (this.after > res.data.totalPage) {
+    //                         this.busy = true;
+    //                     }
+    //                 } else {
+    //                     this.busy = true;
+    //                 }
+    //             }.bind(this));
+    //         };
+    //         return myData;
+    //     }
+    // ]);
+</script>
