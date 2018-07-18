@@ -6,12 +6,13 @@ define(["angularAMD"], function (angularAMD) {
     'use strict';
     var routeManager = function($stateProvider, $urlRouterProvider) {
 
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/main');
 
-            $stateProvider.state('login', angularAMD.route({
-                    url: '/login',
-                    controllerUrl: "js/controllers/loginCtrl.js",
-                    templateUrl: './views/login.html'
+            $stateProvider.state('main', angularAMD.route({
+                    url: '/main',
+                    controllerUrl: "js/controllers/mainCtrl.js",
+                    templateUrl: './views/mainTable.html',
+                    css:"css/myTable.css"
             }))
             .state('home', angularAMD.route({
                 url: '/home',
