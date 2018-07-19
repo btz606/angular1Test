@@ -7,7 +7,7 @@
         <select class="select-style ml-1 select-status-width" ng-model="seleByStatusOption.selectId" ng-options="x.id as x.name for x in seleByStatusOption.options"
             ng-change="seleByStatusOption.change(seleByStatusOption.selectId)"></select>
     </div>
-    <div class="table-div">
+    <div class="table-div" when-scrolled="loadMore()">
         <table class="mainTable">
             <thead>
                 <tr>
@@ -17,29 +17,50 @@
             <tbody ng-if="tableData.length>0">
                 <tr ng-repeat="row in tableData track by $index">
                     <td class="text-long-th" title={{row.Name}} width=row.width>{{$index+1}}</td>
-                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Name }}</td>
-                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
-                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.id }}</td>
+                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.starter }}</td>
+                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.jobName }}</td>
                     <td class="text-long-th" title={{row.Name}} width=row.width>
-                        <span class="pad-right-word" ng-class="{'glyphicon glyphicon-ok-sign text-success':row.status=='done',
-                        'glyphicon glyphicon-remove-sign text-danger':row.status=='fail',
-                        'glyphicon glyphicon-info-sign text-warning':row.status=='todo',
-                        'glyphicon glyphicon-refresh text-primary':row.status=='progress'}" aria-hidden="true">
-                        </span>{{ row.status }}
+                        <span class="pad-right-word" ng-class="{'glyphicon glyphicon-ok-sign text-success':row.state == 2,
+                        'glyphicon glyphicon-info-sign text-warning':row.state==0,
+                        'glyphicon glyphicon-refresh text-primary':row.state==1}" aria-hidden="true">
+                        </span>{{ row.stateShow }}
                     </td>
-                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}+{{ row.Country }}</td>
-                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
-                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
-                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.Country }}</td>
+                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.organizationId }}</td>
+                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.startTime }}</td>
+                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.beginTime }}</td>
+                    <td class="text-long-th" title={{row.Name}} width=row.width>{{ row.duration }}</td>
                     <td width=row.width>
-                        <button type="button" ng-disabled="$index%2==0" ng-click="row.timeDetail(row)" class="btn btn-link btn-sm no-padding-btn">查看详情</button>
+                        <button type="button" data-toggle="modal" data-target="{{'#exampleModalLong' + $index}}" ng-click="row.timeDetail(row)"
+                            class="btn btn-link btn-sm no-padding-btn">查看详情</button>
+                        <!-- 弹出框内容 -->
+                        <div class="modal fade" id="{{'exampleModalLong' + $index}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">执行详情参数显示</h5>
+                                    </div>
+                                    <div class="modal-body" style="height:100%">
+                                        <!-- <div json-show data=row.jsonShow><pre></pre></div> -->
+                                        <pre><code>{{row.jsonShow}}</code></pre>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">关闭</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                     <td width=row.width>
-                        <button type="button" ng-disabled="$index%2!=0" ng-click="row.forceEnd(row)" class="btn btn-link btn-sm no-padding-btn">强制结束</button>
+                        <button type="button" ng-disabled="$index%2!=0" ng-click="row.forceEnd(row)" class="btn btn-link btn-sm no-padding-btn">暂停</button>
                     </td>
                     <td width=row.width>
                         <button type="button" class="btn btn-link btn-sm no-padding-btn">重启</button>
                     </td>
+                    <td width=row.width>
+                        <button type="button" class="btn btn-link btn-sm no-padding-btn">删除</button>
+                    </td>
+
                 </tr>
             </tbody>
             <tbody ng-if="!(tableData.length > 0)">

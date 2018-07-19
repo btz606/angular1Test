@@ -1,9 +1,5 @@
 define([], function () {
-    function homeCtrl($rootScope, $scope) {
-        $scope.name = "欢迎使用健康评估服务终端系统";
-        $("#login").click(function () {
-            $rootScope.go("home")
-        })
+    function homeCtrl($rootScope, $scope, commonModal, $http) {
 
         $scope.loading = false;
 
@@ -19,32 +15,40 @@ define([], function () {
             }
         };
 
+        $scope.sendData = {
+            condition: {
+                dataIndex: 0,
+                condition: {
+                    'state': 3
+                    // 表示全部的数据
+                }
+            }
+        };
+
         // 过滤条件选择
         $scope.seleByStatusOption = {
-            selectId: "",
+            selectId: 3,
             options: [{
                     name: "全部状态",
-                    id: ""
+                    id: 3
                 }, {
-                    name: "已完成",
-                    id: "done"
+                    name: "同步完成",
+                    id: 2
                 },
                 {
-                    name: "同步中",
-                    id: "progress"
+                    name: "正在同步",
+                    id: 1
                 },
                 {
-                    name: "未同步",
-                    id: "todo"
-                },
-                {
-                    name: "同步失败",
-                    id: "fail"
+                    name: "队列中",
+                    id: 0
                 }
             ],
             change: function (data) {
-                // alert("发往后台" + data);
-                $scope.loading = !$scope.loading;
+                console.log(data);
+                $scope.sendData.condition.state = data;
+                $scope.init();
+                // $scope.loading = !$scope.loading;
             }
         };
 
@@ -83,25 +87,115 @@ define([], function () {
         };
 
         var houtai = [{
-            Name: "dasdasdsadasdasdsa",
-            Country: "USAUSAUSAUSAUSAUSAUSAUSAUSA",
-            width: "20%",
-            status: "progress"
+            "id": "12456",
+            "jobName": "282330643629604864",
+            "organizationId": "LZDatePlatform_15215138234_53305584107157536",
+            "jobDescription": "10w+10w",
+            "jobDetail": '{"name":"Mike","sex":"女","age":"29"}',
+            "jobMessage": {
+                "tableIdList": [
+                    "277956925667147776"
+                ]
+            },
+            "state": 0,
+            "starter": "局座",
+            "timeSync": 0,
+            "jobClass": "com.leading.dataplatform.job.unionTable.UnionTableJob",
+            "syncTimeList": [{
+                    "hours": 8,
+                    "minutes": 40
+                },
+                {
+                    "hours": 8,
+                    "minutes": 41
+                }
+            ],
+            "beginTime": "2012.2.12",
+            "startTime": "2012.2.12",
+            "duration": "3min"
+
         }, {
-            Name: "bbb",
-            Country: "China",
-            width: "20%",
-            status: "todo"
+            "id": "89856",
+            "jobName": "282330644321341231",
+            "organizationId": "LZDatePlatform_15215138234_53305584107157536",
+            "jobDescription": "10w+10w",
+            "jobDetail": '{"name":"Mike","sex":"女","age":"29"}',
+            "jobMessage": {
+                "tableIdList": [
+                    "277956925667147776"
+                ]
+            },
+            "state": 1,
+            "starter": "船长",
+            "timeSync": 0,
+            "jobClass": "com.leading.dataplatform.job.unionTable.UnionTableJob",
+            "syncTimeList": [{
+                    "hours": 8,
+                    "minutes": 40
+                },
+                {
+                    "hours": 8,
+                    "minutes": 41
+                }
+            ],
+            "beginTime": "2019.2.12", //任务开始执行时间
+            "startTime": "3212.2.12",
+            "duration": "877min"
         }, {
-            Name: "ccc",
-            Country: "Cananda",
-            width: "20%",
-            status: "done"
+            "id": "78552",
+            "jobName": "44444444444444444",
+            "organizationId": "LZDatePlatform_15215138234_53305584107157536",
+            "jobDescription": "1w+999w",
+            "jobDetail": '{"a": 1, "b": "string", "c": [1, "11"]}',
+            "jobMessage": {
+                "tableIdList": [
+                    "277956925667147776"
+                ]
+            },
+            "state": 2,
+            "status": 'done',
+            "starter": "猴哥",
+            "timeSync": 0,
+            "jobClass": "com.leading.dataplatform.job.unionTable.UnionTableJob",
+            "syncTimeList": [{
+                    "hours": 8,
+                    "minutes": 40
+                },
+                {
+                    "hours": 8,
+                    "minutes": 41
+                }
+            ],
+            "beginTime": "5623.2.12",
+            "startTime": "4512.2.12",
+            "duration": "5min"
         }, {
-            Name: "ddd",
-            Country: "Jap",
-            width: "20%",
-            status: "fail"
+            "id": "34123412",
+            "jobName": "777777777777777777",
+            "organizationId": "LZDatePlatform_15215138234_53305584107157536",
+            "jobDescription": "17w+10w",
+            "jobDetail": '[{"CityId":18,"CityName":"西安","ProvinceId":27,"CityOrder":1},{"CityId":53,"CityName":"广州","ProvinceId":27,"CityOrder":1}]',
+            "jobMessage": {
+                "tableIdList": [
+                    "277956925667147776"
+                ]
+            },
+            "state": 2,
+            "starter": "厨子",
+            "timeSync": 0,
+            "jobClass": "com.leading.dataplatform.job.unionTable.UnionTableJob",
+            "syncTimeList": [{
+                    "hours": 8,
+                    "minutes": 40
+                },
+                {
+                    "hours": 8,
+                    "minutes": 41
+                }
+            ],
+            "beginTime": "2587.2.12",
+            "startTime": "3652.2.12",
+            "duration": "9min"
         }];
 
         /*分页配置信息,使用插件tm.pagination.js
@@ -166,12 +260,17 @@ define([], function () {
             sort: "asc",
             show: true
         }, {
-            name: "强制结束",
+            name: "暂停",
             width: "10%",
             sort: "asc",
             show: true
         }, {
             name: "重启",
+            width: "10%",
+            sort: "asc",
+            show: true
+        }, {
+            name: "删除",
             width: "10%",
             sort: "asc",
             show: true
@@ -182,38 +281,96 @@ define([], function () {
 
         // 初始化页面，获取后台数据
         $scope.init = function () {
-            // $http({
-            //     method: 'GET',
-            //     url: '/someUrl'
-            // }).then(function successCallback(response) {
-            //     // 请求成功执行代码
-            // }, function errorCallback(response) {
-            //     // 请求失败执行代码
-            // });
+            $http({
+                method: 'POST',
+                url: '/getRecords',
+                data: $scope.sendData
+            }).then(function successCallback(response) {
+                console.log(response);
+                $scope.doData();
+                // 请求成功执行代码
+            }, function errorCallback(response) {
+                console.log("获取请求数据失败");
+                // 请求失败执行代码
+            });
             $scope.doData(houtai);
         };
 
         // 对数据做处理点击事件，按钮禁用状态，任务执行状态
         $scope.doData = function (houtai) {
             var index;
-            for (var i = 0; i < 50; i++) {
+
+            ////后期删除，临时模拟用
+            // 将得到的数据加在$scope.tableData后面
+            for (var i = 0; i < 40; i++) {
                 index = _.random(0, 3);
                 $scope.tableData.push(houtai[index]);
             }
+            ////后期删除，临时模拟用
+
+
             $scope.paginationConf.totalItems = $scope.tableData.length;
-            console.log($scope.tableData.length);
-            $scope.paginationConf.totalItems = _.random(100, 10000);
             $scope.paginationConf.currentPage = 1;
+            // 维护此数据，用于滚动加载
+            $scope.sendData.condition.dataIndex = $scope.paginationConf.totalItems + $scope.sendData.condition.dataIndex;
             _.each($scope.tableData, function (item) {
-                item.timeDetail = function (row) {
-                    commonModal.openMoadl(row.data + "定时同步详情");
-                };
+                item.jsonShow = JSON.stringify(JSON.parse(item.jobDetail), null, 2);
+                item.stateShow = item.state == 0 ? "队列中" : (item.state == 1 ? "正在同步" : "同步完成")
+                // item.timeDetail = function (row) {
+                // // commonModal.openMoadl(row.data + "定时同步详情");
+                // var modalInstance = $modal.open({
+                //     windowClass: '',
+                //     templateUrl: './views/common/modal.html',
+                //     controller: 'js/controllers/common/ModalInstanceCtrl',
+                //     resolve: {}
+                // });
+                // modalInstance.opened.then(function () { // 模态窗口打开之后执行的函数
+                //     console.log('modal is opened');
+                // });
+                // modalInstance.result.then(function (ret) { //模态窗口关闭之后回传参数
+                //     $modalInstance.close($scope.selected);
+                //     console.log(ret);
+                // }, function (reason) {
+                //     console.log(reason);
+                // });
+                // };
                 item.forceEnd = function (row) {
                     // post请求
-                    commonModal.openMoadl(row.data + "强制结束");
+                    commonModal.openMoadl(row.data + "暂停");
                 }
             })
+
+            // $scope.apply();
         };
+
+        $scope.loadMore = function () {
+            // 后期删除
+            $scope.init();
+            // 此时发送$scope.sendData.condition.dataIndex
+            for (var i = 0; i < 10; i++) {
+                index = _.random(0, 3);
+                $scope.tableData.push(houtai[index]);
+            }
+            // 为新加入的数据加上数据处理，事件绑定
+
+            // if ($scope.currentPage < $scope.totalPages) {
+            //     $scope.currentPage++;
+            //     if ($scope.busy) {
+            //         return false;
+            //     }
+            //     $scope.busy = true;
+            //     // 请求后台服务器  
+            //     $http.get('http://127.0.0.1/Test/scroll/Test.php?page=' + $scope.currentPage)
+            //         .success(function (data) {
+            //             $scope.busy = false;
+            //             //组织数据  
+            //             for (var i in data.data) {
+            //                 $scope.items.push(data.data[i]);
+            //             }
+            //             $scope.totalPages = data.countPage;
+            //         });
+            // }
+        }
 
         $scope.init();
 
