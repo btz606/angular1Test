@@ -1,5 +1,5 @@
-define(['angular', 'routeManager'],
-    function (angular, RouteManager) {
+define(['angular', 'routeManager', 'laydate'],
+    function (angular, RouteManager, laydate) {
         var myApp = angular.module('starter', ['ui.router', "door3.css"]);
         myApp.config(
                 ['$controllerProvider', function ($controllerProvider) {
@@ -12,13 +12,63 @@ define(['angular', 'routeManager'],
                 }
 
             }])
+            .directive('defLaydate', function () {
+                return {
+                    require: '?ngModel',
+                    restrict: 'A',
+                    scope: {
+                        ngModel: '='
+                    },
+                    link: function (laydate, scope, element, attr, ngModel) {
+                        var _date = null,
+                            _config = {};
+
+                        // 初始化参数 
+                        _config = {
+                            elem: '#' + attr.id,
+                            format: attr.format != undefined && attr.format != '' ? attr.format : 'YYYY-MM-DD',
+                            max: attr.hasOwnProperty('maxDate') ? attr.maxDate : '',
+                            min: attr.hasOwnProperty('minDate') ? attr.minDate : '',
+                            choose: function (data) {
+                                scope.$apply(setViewValue);
+
+                            },
+                            clear: function () {
+                                ngModel.$setViewValue(null);
+                            }
+                        };
+                        // 初始化
+                        _date = laydate(_config);
+
+
+
+                        // 模型值同步到视图上
+                        ngModel.$render = function () {
+                            element.val(ngModel.$viewValue || '');
+                        };
+
+                        // 监听元素上的事件
+                        element.on('blur keyup change', function () {
+                            scope.$apply(setViewValue);
+                        });
+
+                        setViewValue();
+
+                        // 更新模型上的视图值
+                        function setViewValue() {
+                            var val = element.val();
+                            ngModel.$setViewValue(val);
+                        }
+                    }
+                }
+            })
+
             /* 遮罩层指令 */
             .directive('loading', function loading() {
                 return {
                     restrict: 'E',
                     transclude: true,
                     template: '<div ng-show="loading" class="loading" id="allDiv"  style="position:fixed; top:0px; left:0px; width:100%; height:100%; display:none; background-color:#000; opacity: 0.5; z-index:99999;">' +
-                        '<img alt="" src="img/loading.gif" style="vertical-align: middle;width:100px; height:100px; position: absolute; top:50%; left:50%; margin-top: -50px; margin-left:-50px;"/>' +
                         '<span style="vertical-align: middle;width:300px; height:100px; position: absolute; top:50%;font-size:30px;color：black; left:50%; margin-top: -50px; margin-left:-50px;">数据加载中</span></div>',
                     link: function (scope, element, attr) {
                         scope.$watch('loading', function (val) {
@@ -43,24 +93,24 @@ define(['angular', 'routeManager'],
                     });
                 };
             })
-            
+
             /* 页面展示格式化json */
             .directive('jsonShow', function () {
                 return {
                     restrict: 'ECMA',
                     transclude: false,
                     template: '<pre></pre>',
-                    scope:{
-                        data:'='
+                    scope: {
+                        data: '='
                     },
                     link: function (scope, elm, attr) {
-                        if (scope.data){
+                        if (scope.data) {
                             elm.children().html(getJsonShow(scope.data));
                         }
                     }
                 }
 
-                function getJsonShow (json) {
+                function getJsonShow(json) {
                     if (typeof json != 'string') {
                         json = JSON.stringify(json, undefined, 2);
                     }

@@ -12,7 +12,8 @@ require.config({
         "jquery": '../libs/jquery/jquery-1.12.4.min',
         "echart":'../libs/plugin/echarts.min',
         "commonFunc":"../js/common/commonFunc",
-        "routeManager":'routeManager'
+        "routeManager":'routeManager',
+        "laydate":'../libs/layDate-v5.0.9/laydate/laydate'
     },
     shim: {
         "angular": { exports: "angular" },

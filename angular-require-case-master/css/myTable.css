@@ -41,7 +41,8 @@ body {
     margin-bottom: 20px;
 }
 
-.mainTable {
+.mainTable,
+.table-show-head {
     width: 100%;
     min-width: 1000px;
     overflow-x: auto;
@@ -49,6 +50,16 @@ body {
     /* overflow-y:hidden; */
     table-layout: fixed;
     border: 1px solid #dddddd;
+}
+
+.table-show-head {
+    background-color: #F8F9FC;
+    font-weight: bold;
+    position: absolute;
+}
+
+.table-show-head {
+    width:calc(100% - 47px);
 }
 
 .mainTable,

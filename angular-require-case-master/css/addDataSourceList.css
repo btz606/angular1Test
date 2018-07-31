@@ -1,0 +1,7 @@
+ul li {
+    width: 100px;
+    display: block;
+    height: 50px;
+    background-color: antiquewhite;
+    border:solid 2px blueviolet;
+}

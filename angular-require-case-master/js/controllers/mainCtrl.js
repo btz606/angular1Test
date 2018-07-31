@@ -15,6 +15,8 @@ define([], function () {
             }
         };
 
+        $scope.startTime = '';
+
         $scope.sendData = {
             condition: {
                 dataIndex: 0,
