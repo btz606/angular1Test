@@ -41,7 +41,7 @@ define(["echart"], function (echart) {
             "typeOrder": 4,
             "typeImageUrl": "/AppPlus/LZDataPlatform/pc/DataSource/Image/Default/ETL.png",
             "typeThumbnailUrl": ""
-        }]
+        }];
 
         var tabContent = [{
             "id": "289732258753679660",
@@ -75,22 +75,34 @@ define(["echart"], function (echart) {
             "typeOrder": 3,
             "typeImageUrl": "",
             "typeThumbnailUrl": null
-        }]
-
-        $scope.sendData = angular.copy(sendData);
-        $scope.tabContent = angular.copy(tabContent);
+        }];
 
         /*
         与页面绑定的相关参数
         */
         $scope.config = {
-            advanceSearch: '',  //搜索过滤的绑定数据
-            textShow: "输入搜索内容",   //提示信息
-            tabChosen: "",  // 当前选择的页签
+            advanceSearch: '', // 搜索过滤的绑定数据
+            textShow: "输入搜索内容", // 提示信息
+            tabChosen: "", // 当前选择的页签
             clickChose: function (data) { // 页签选择的函数
                 $scope.config.tabChosen = data.typeName;
                 $scope.getTabContent();
             }
+        };
+
+        $scope.sendData = angular.copy(sendData);
+        $scope.tabContent = angular.copy(tabContent);
+
+        /*
+        页面初始化函数
+        获取后台数据以及页签选择的状态
+        */
+        $scope.init = function () {
+            // 给$scope.config.tabChosen给定数值
+
+            // 执行函数,用于初始化选择的页签，获取localStroage中的也签选择
+            $scope.getTabContent();
+
         };
 
         /*
@@ -125,7 +137,9 @@ define(["echart"], function (echart) {
             }
 
             $scope.sendData = arrShow;
-        }
+        };
+
+        $scope.init();
 
     }
 
