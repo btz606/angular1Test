@@ -23,3 +23,52 @@
         </div>
     </div> -->
 </div>
+<div style="background-color: aliceblue;height:600px;height:600px;text-align: center;">
+    <div style="background-color: antiquewhite">
+        <div>
+            <input type="radio" name="sex" value="male" ng-model="person.sex" />男
+            <input type="radio" name="sex" value="female" ng-model="person.sex" />女
+            <input type="radio" name="sex" value="unkonwn" ng-model="person.sex" />不男不女
+        </div>
+    </div>
+    <div style="background-color: bisque">
+        <div ng-if="person.sex =='male'">
+            <div style="width:600px;background-color: aquamarine">
+                <div class="left-control">
+                    <span>数据</span>
+                    <div>搜索框</div>
+                    <ul>
+                        <li ng-repeat="it in ulList track by it.name">
+                            <p ng-dblclick="addStrOpts(it,$event)">
+                                <a class="" ng-click="addStrOpts(it,$event)">添加</a>
+                                <span class="" title="{{it.name}}">{{it.name}}</span>
+                            </p>
+                        </li>
+                    </ul>
+                    <a style="color: blue" ng-click="addAll()">全部添加</a>
+                </div>
+                <div class="right-control">
+                    <select class="" ng-model="seleByStatusOption.selectId" ng-options="x.id as x.name for x in seleByStatusOption.options"
+                        ng-change="seleByStatusOption.change(seleByStatusOption.selectId)"></select>
+                    <div ng-if="rightList.length>0">
+                        <ul>
+                            <li ng-repeat="it in rightList track by it.name">
+                                <p ng-dblclick="removeStrOpts(it,$event)">
+                                    <a class="" ng-click="removeStrOpts(it,$event)">删除</a>
+                                    <span class="" title="{{it.name}}">{{it.name}}</span>
+                                </p>
+                            </li>
+                        </ul>
+                        <span tyle="color: blue" ng-click="addAll()">已添加{{rightList.length}}条</span>
+                        <a ng-click="removeAll()">清空</a>
+                    </div>
+                    <div ng-if="rightList.length==0">
+                        请从左侧列表添加
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="person.sex =='female'">222</div>
+        <div ng-if="person.sex =='unkonwn'">333</div>
+    </div>
+</div>

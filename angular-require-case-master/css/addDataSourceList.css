@@ -1,7 +1,55 @@
-ul li {
+/* ul li {
     width: 100px;
     display: block;
     height: 50px;
     background-color: antiquewhite;
     border:solid 2px blueviolet;
+} */
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    position: relative;
+    line-height: 20px;
+    padding-left: 16px;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+ul li a {
+    color: rgba(81, 130, 228, 1);
+    opacity: 0;
+    float: right;
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+ul li a:hover {
+    text-decoration: underline;
+    opacity: 1;
+}
+
+ul li:hover {
+    transition: all .05s ease-in;
+    color: rgba(10, 18, 32, .87);
+    background-color: rgba(232, 235, 237, .6);
+}
+
+.left-control {
+    width: 49%;
+    float: left;
+    margin-left: 1px;
+    background-color: white;
+}
+
+.right-control {
+    width: 49%;
+    float: left;
+    margin-left: 1px;
+    background-color: white;
 }

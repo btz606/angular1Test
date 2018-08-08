@@ -43,6 +43,77 @@ define(["echart"], function (echart) {
             "typeThumbnailUrl": ""
         }];
 
+        // 过滤条件选择
+        $scope.seleByStatusOption = {
+            selectId: 1,
+            options: [{
+                    name: "包含下列选项",
+                    id: 1
+                }, {
+                    name: "不包含下列选项",
+                    id: 2
+                }
+            ],
+            change: function (data) {
+                console.log(data);
+                $scope.sendData.condition.state = data;
+                $scope.init();
+                // $scope.loading = !$scope.loading;
+            }
+        };
+
+        $scope.person = {
+            sex: "male"
+        }
+
+        $scope.addStrOpts = function (item, $event) {
+            for (var i = 0; i < $scope.ulList.length; i++) {
+                if ($scope.ulList[i].name == item.name) {
+                    // $scope.ulList.splice(i, 1);
+                    $scope.rightList.push(item);
+                    console.log($scope.rightList);
+                }
+            }
+        }
+
+        $scope.removeStrOpts = function (item, $event) {
+            for (var i = 0; i < $scope.rightList.length; i++) {
+                if ($scope.rightList[i].name == item.name) {
+                    $scope.rightList.splice(i, 1);
+                    $scope.ulList.push(item);
+                    console.log($scope.ulList);
+                }
+            }
+        }
+
+        $scope.addAll = function () {
+            $scope.rightList = [];
+            $scope.rightList = angular.copy($scope.ulList);
+        }
+
+        $scope.removeAll = function () {
+            $scope.rightList = [];
+        }
+
+        $scope.ulList = [{
+            name: 1
+        }, {
+            name: 2
+        }, {
+            name: 3
+        }, {
+            name: 4
+        }, {
+            name: 5
+        }, {
+            name: 6
+        }, {
+            name: 7
+        }, {
+            name: 8
+        }];
+        $scope.rightList = []
+
         var tabContent = [{
             "id": "289732258753679660",
             "parentId": "0",
