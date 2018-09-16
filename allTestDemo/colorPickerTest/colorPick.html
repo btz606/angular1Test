@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+
+<head>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/dist/css/bootstrap-colorpicker.css" rel="stylesheet">
+    <link rel="stylesheet" href="colorPick.css" type="text/css">
+</head>
+
+<body>
+    <div class="main" ng-app="myApp" ng-controller="myCtrl">
+        <div class="item" ng-click="row.is=!row.is" colorpick=row ng-repeat="row in params">
+            {{row.value}}
+            <input class="color-input-dir form-control" colorpick=row type="text" id="{{row.id}}" value="{{row.value}}" />
+        </div>
+        <!-- <input id="cp1" type="text" class="form-control" value="#5367ce" />
+        <input id="cp2" type="text" class="form-control" value="#5367ce" /> -->
+    </div>
+    <script src="https://cdn.bootcss.com/angular.js/1.4.6/angular.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- <script src="lib/dist/js/bootstrap-colorpicker.min.js"></script> -->
+    <script src="lib/dist/js/bootstrap-colorpicker.js"></script>
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope) {
+            $('#cp1').colorpicker({
+                inline: true,
+                container: true,
+                template: '<div class="colorpicker">' +
+                    '<div class="colorpicker-saturation"><i class="colorpicker-guide"></i></div>' +
+                    '<div class="colorpicker-hue"><i class="colorpicker-guide"></i></div>' +
+                    '<div class="colorpicker-alpha">' +
+                    '   <div class="colorpicker-alpha-color"></div>' +
+                    '   <i class="colorpicker-guide"></i>' +
+                    '</div>' +
+                    '<div class="colorpicker-bar"><button class="btn btn-danger">Button</button></div>' +
+                    '</div>'
+            });
+
+            $('#cp2').colorpicker();
+            $scope.params = [{
+                id: "1",
+                show: "1",
+                value: "#5367ce",
+                is: false
+            }, {
+                id: "2",
+                show: "2",
+                value: false, // 为空设置为false
+                is: false
+            }, {
+                id: "3",
+                show: "3",
+                value: "#5797ce",
+                is: false
+            }];
+        });
+        app.directive('colorpick', function () {
+            return {
+                restrict: 'ECMA',
+                transclude: false,
+                scope: {
+                    colorpick: '=colorpick'
+                },
+                link: function (scope, elm, attr) {
+                    setTimeout(function () {
+                        $('#' + scope.colorpick.id).colorpicker({
+                            color: scope.colorpick.value
+                        });
+                    })
+                    scope.$watch('colorpick', function (newVal) {
+                        console.log(newVal); //每次你在controller里修改了userInfo，这里都会打印
+                        if (scope.colorpick.is) {
+                            $('#' + scope.colorpick.id).colorpicker({
+                                color: scope.colorpick.value
+                            });
+                        }
+                    }, true);
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
