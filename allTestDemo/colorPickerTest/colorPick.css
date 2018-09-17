@@ -17,18 +17,6 @@ body {
     background-color: bisque;
 }
 
-.color-input-dir{
-    /* padding-top: 30px; */
-}
-
-.show{
-    display:block;
-}
-
-.hide {
-    display:none;
-}
-
 .my-btn-colpick {
     width: 50px;
     height: 20px;

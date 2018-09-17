@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+
+<head>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="workGroup.css" type="text/css">
+</head>
+
+<body>
+    <div class="main" ng-app="myApp" ng-controller="myCtrl">
+        <div class="content-group">
+            <div ng-repeat="row in params" class="content-item">
+                <div ng-if="row.name!= ''" class="content-pre">
+                    <img alt="" src="lib/dist/img/IMG_3145.PNG" />
+                </div>
+                <div ng-if="row.name!= ''" class="content-next">
+                    <div class="content-next-head">
+                        <span title="{{row.name}}" class="pl-1">{{row.name}}</span>
+                        <span class="pl-1">{{row.date}}</span>
+                    </div>
+                    <div class="content-next-body">
+                        <span class="pl-1">{{row.members}}</span>
+                        <img title="编辑" class="cur-pointer" alt="" src="lib/dist/img/IMG_3147.PNG" />
+                    </div>
+                    <div class="content-next-bottom">
+                        <span class="pl-1">{{row.boss}}</span>
+                        <button> 删除</button>
+                    </div>
+                </div>
+                <div class='content-no-data' ng-if="row.name == ''">
+                    <img alt="" src="lib/dist/img/IMG_3143.PNG" />                
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/angular.js/1.4.6/angular.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope) {
+            $scope.params = [{
+                name: "经营管理数据分析组",
+                title: "aaa",
+                date: "2018/5/16",
+                members: "成员：3人",
+                boss: "刘丽丽"
+            }, {
+                name: "经营管理数据分析组经营管理数据分析组经营管理数据分析组",
+                title: "bbb",
+                date: "2/5/16",
+                members: "成员：56人",
+                boss: "大猪蹄子"
+            }, {
+                name: "333",
+                title: "ccc",
+                date: "2018/5/16",
+                members: "成员：3人",
+                boss: "刘丽丽"
+            }, {
+                name: "444",
+                title: "ddd",
+                date: "2018/5/16",
+                members: "成员：3人",
+                boss: "刘丽丽"
+            }, {
+                name: "555",
+                title: "fff"
+            }, {
+                name: "666",
+                title: "hhh"
+            }, {
+                name: "7",
+                title: "iii"
+            }];
+
+            $scope.params.push({
+                add:true,
+                name: ""
+            })
+        });
+        app.directive('colorpick', function () {
+            return {
+                restrict: 'ECMA',
+                transclude: false,
+                scope: {
+                    colorpick: '=colorpick'
+                },
+                link: function (scope, elm, attr) {
+                    setTimeout(function () {
+                        $('#' + scope.colorpick.id).colorpicker({
+                            color: scope.colorpick.value
+                        });
+                    })
+                    scope.$watch('colorpick', function (newVal) {
+                        console.log(newVal); //每次你在controller里修改了userInfo，这里都会打印
+                        if (scope.colorpick.is) {
+                            $('#' + scope.colorpick.id).colorpicker({
+                                color: scope.colorpick.value
+                            });
+                        }
+                    }, true);
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
