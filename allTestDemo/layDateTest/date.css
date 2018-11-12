@@ -1,0 +1,124 @@
+html,
+body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    background-color: aliceblue;
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    padding: 30px;
+}
+
+.pl-1 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.cur-pointer {
+    cursor: pointer;
+}
+
+.content-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start
+}
+
+.content-item {
+    width: 360px;
+    height: 277px;
+    background-color: #d9edf7;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.content-pre {
+    height: 130px;
+    width: 360px;
+    background: url(lib/dist/img/IMG_3141.PNG);
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.content-no-data {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    width: 360px;
+    height: 277px;
+}
+
+.content-next-head {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-next-head>:first-child {
+    font-size: 18px;
+    font-family: "Microsoft YaHei";
+    color: #333333;
+    text-overflow: ellipsis;
+    max-width: 280px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.content-next-head>:last-child {
+    font-size: 15px;
+    font-family: "Microsoft YaHei";
+    color: #7a7a7a;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.content-next-body {
+    margin-top: 20px;
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 10px;
+    margin-bottom: 10px;   
+    height: 34px;
+    line-height: 34px;
+}
+
+.content-next-body span {
+    font-size: 15px;
+    font-family: "Microsoft YaHei";
+    color: #9999a6;
+}
+
+.content-next-body img{
+    margin-top: -5px;
+}
+
+.content-next-bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-next-bottom span {
+    font-size: 15px;
+    font-family: "Microsoft YaHei";
+    color: #9999a6;
+}
+
+.content-next-bottom button {
+    font-size: 13px;
+    font-family: "Microsoft YaHei";
+    color: #717171;
+    width: 48px;
+    height: 24px;
+    border-radius: 11px;
+    outline: none;
+    margin-right: 20px;
+    background-color: #fff;
+    border: 0;
+}
