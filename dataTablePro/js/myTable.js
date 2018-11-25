@@ -13,23 +13,6 @@
 
     })
 
-    // 初始化图片验证的js
-    $('#mpanel2').codeVerify({
-        type: 1,
-        width: '400px',
-        height: '50px',
-        fontSize: '30px',
-        codeLength: 6,
-        btnId: 'check-btn',
-        ready: function () {},
-        success: function () {
-            alert('验证匹配！');
-        },
-        error: function () {
-            alert('验证码不匹配！');
-        }
-    });
-
 })(jQuery);
 
 // Styles Switcher
@@ -53,6 +36,10 @@ jQuery(document).ready(function () {
     });
 
 });
+
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
 
 window.onload = function (e) {
     // var cookie = readCookie("style");

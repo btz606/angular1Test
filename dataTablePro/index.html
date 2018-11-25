@@ -1,19 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    
+
     <!-- 练习表格自写样式 -->
     <link rel="stylesheet" type="text/css" href="css/myTable.css">
+    <link rel="stylesheet" type="text/css" href="lib/DataTables-1.10.15/media/css/dataTables.jqueryui.min.css">
 </head>
-<body>
-    
 
+<body>
+
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>Column 1</th>
+                <th>Column 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Row 1 Data 1</td>
+                <td>Row 1 Data 2</td>
+            </tr>
+            <tr>
+                <td>Row 2 Data 1</td>
+                <td>Row 2 Data 2</td>
+            </tr>
+        </tbody>
+    </table>
 
     <!-- Custom js -->
+    <script src="lib/DataTables-1.10.15/media/js/jquery.js"></script>
+    <script src="lib/DataTables-1.10.15/media/js/jquery.dataTables.min.js"></script>
     <script src="js/myTable.js"></script>
 </body>
+
 </html>
